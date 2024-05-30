@@ -140,7 +140,9 @@ const SearchPage = () => {
       <div className="p-10 bg-gray-800 rounded mr-10 ml-10">
         {loading ? (
           <p className="text-white text-xl text-center">Loading results...</p>
-        ) : (
+        ) 
+          : 
+        (
           results.length > 0 ? (
             <ul className="list-disc list-inside text-white  space-y-6 w-full max-w-3xl mx-auto">
               {results.map((result, index) => (
