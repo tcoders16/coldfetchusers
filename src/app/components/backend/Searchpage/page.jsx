@@ -100,7 +100,7 @@ const SearchPage = () => {
 
   return (
     <div className="min-h-screen w-4/6  bg-gray-900  rounded-3xl ">
-      <h1 className="text-4xl font-poppins-regular mb-8 text-zinc-300 text-center mt-10"> Google Custom Search Results</h1>
+      <h1 className="text-4xl font-poppins-regular mb-8 text-zinc-300 text-center mt-10"> Google Custom Search </h1>
       <h2 className="text-lg font-poppins-light text-zinc-100 text-center mb-14">Made By Sr. Software  Engnieer  - Solanki Omkumar</h2>
       
       <form onSubmit={handleSearch} className="mb-8 w-full max-w-3xl mx-auto flex flex-col space-y-4">
