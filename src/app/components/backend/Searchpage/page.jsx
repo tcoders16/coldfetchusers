@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-const apiKey = 'AIzaSyDbs5gd0-fRd1691ZaiENr9wzmR1pcWHfM';
+const apiKey = 'AIzaSyC9nsInnGSujg-sRItP3kx2XOIbBk1fLtE';
 const cx = 'e06da44efe1a64a45';
 const numResults = 100; // Number of results you want
 
@@ -80,10 +80,7 @@ const SearchPage = () => {
 
   const handleSearch = async (e) => {
     e.preventDefault();
-    let searchQuery = `site:${site} "${profession}" "${place}" "${emailDomain}"`;
-    if (name.trim()) {
-      searchQuery += ` "${name}"`;
-    }
+    const searchQuery = `site:${site} "${profession}" "${place}" "${emailDomain}" "${name}"`;
     setQuery(searchQuery);
     setLoading(true);
     setSuccessMessage('');
@@ -108,20 +105,22 @@ const SearchPage = () => {
 
   return (
     <div className="min-h-screen w-4/6 bg-gray-900 rounded-3xl">
-      <h1 className="text-4xl font-poppins-regular mb-8 text-zinc-300 text-center mt-10">Google Custom Search</h1>
+      <h1 className="text-4xl font-poppins-regular mb-8 text-zinc-300 text-center mt-10"> Google Custom Search </h1>
       <h2 className="text-lg font-poppins-light text-zinc-100 text-center mb-14">
         Developer Sr. Software Engineer - <span className="text-green-500 font-poppins-light">Solanki Omkumar</span>
       </h2>
-      
+      {/* <p className="mb-10 underline-offset-4 text-zinc-200 font-poppins-regular text-3xl text-center">Cold Selling made easy!</p> */}
       <form onSubmit={handleSearch} className="mb-8 w-full max-w-3xl mx-auto flex flex-col rounded-3xl space-y-4 items-center">
         <div className="w-full md:w-1/2">
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="p-4 mb-3 rounded bg-gray-800 text-white placeholder-gray-400 w-full border border-gray-700 focus:outline-none focus:border-blue-500 transition duration-200 transform hover:scale-105 focus:scale-110 shadow hover:shadow-lg focus:shadow-xl"
-            placeholder="(e.g., Omkumar) Or Null"
-          />
+
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="p-4 mb-3 rounded bg-gray-800 text-white placeholder-gray-400 w-full border border-gray-700 focus:outline-none focus:border-blue-500 transition duration-200 transform hover:scale-105 focus:scale-110 shadow hover:shadow-lg focus:shadow-xl"
+              placeholder="(e.g., Omkumar ) Or Null"
+            />
+ 
           <input
             type="text"
             value={site}
@@ -145,6 +144,7 @@ const SearchPage = () => {
             value={place}
             onChange={(e) => setPlace(e.target.value)}
             className="p-4 rounded bg-gray-800 text-white placeholder-gray-400 w-full border border-gray-700 focus:outline-none focus:border-blue-500 transition duration-200 transform hover:scale-105 focus:scale-110 shadow hover:shadow-lg focus:shadow-xl"
+
             placeholder="Enter place (e.g., canada)"
           />
         </div>
@@ -157,7 +157,7 @@ const SearchPage = () => {
             placeholder="Enter email domain (e.g., @gmail.com)"
           />
         </div>
-        <button type="submit" className="bg-blue-500 text-white p-4 rounded hover:bg-blue-600 transition duration-200 w-full md:w-1/2 focus:outline-none focus:border-blue-500 transition duration-200 transform hover:scale-105 focus:scale-110 shadow hover:shadow-lg focus:shadow-xl">
+        <button type="submit" className="bg-blue-500 text-white p-4 rounded hover:bg-blue-600 transition duration-200 w-full md:w-1/2  focus:outline-none focus:border-blue-500 transition duration-200 transform hover:scale-105 focus:scale-110 shadow hover:shadow-lg focus:shadow-xl">
           Search
         </button>
       </form>
@@ -166,6 +166,7 @@ const SearchPage = () => {
         <div className="text-center p-4 mb-4 font-poppins-light text-green-400">
           <strong>{successMessage}</strong>
         </div>
+   
       )}
 
       {errorMessage && (
@@ -177,7 +178,9 @@ const SearchPage = () => {
       <div className="p-10 bg-gray-800 rounded m-20">
         {loading ? (
           <p className="text-white text-xl text-center">Loading results...</p>
-        ) : (
+        ) 
+          : 
+        (
           results.length > 0 ? (
             <ul className="list-disc list-inside text-white space-y-6 w-full max-w-3xl mx-auto">
               {results.map((result, index) => (
@@ -199,6 +202,7 @@ const SearchPage = () => {
                         {result.phones.map((phone, i) => <li key={i} className="text-white">{phone}</li>)}
                       </ul>
                     </div>
+        
                   )}
                   <a href={result.link} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-600 underline text-xl font-semibold">
                     {result.title}
@@ -215,5 +219,5 @@ const SearchPage = () => {
     </div>
   );
 };
-export default SearchPage;
 
+export default SearchPage;
