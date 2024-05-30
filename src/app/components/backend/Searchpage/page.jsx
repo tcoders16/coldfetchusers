@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
-const apiKey = 'AIzaSyBX2L2d_FVbwMkfbyptRPMkdDBZTrxwnpA';
+const apiKey = 'AIzaSyDbs5gd0-fRd1691ZaiENr9wzmR1pcWHfM';
 const cx = 'e06da44efe1a64a45';
 const numResults = 100; // Number of results you want
 
@@ -67,6 +67,7 @@ const extractDetails = (item) => {
 };
 
 const SearchPage = () => {
+  const [name, setName] = useState('');
   const [site, setSite] = useState('linkedin.com');
   const [profession, setProfession] = useState('doctors');
   const [place, setPlace] = useState('canada');
@@ -74,77 +75,111 @@ const SearchPage = () => {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleSearch = async (e) => {
     e.preventDefault();
-    const searchQuery = `site:${site} "${profession}" "${place}" "${emailDomain}"`;
+    let searchQuery = `site:${site} "${profession}" "${place}" "${emailDomain}"`;
+    if (name.trim()) {
+      searchQuery += ` "${name}"`;
+    }
     setQuery(searchQuery);
     setLoading(true);
-    const searchResults = await fetchSearchResults(searchQuery);
-    const detailedResults = searchResults.map(extractDetails);
-    setResults(detailedResults);
-    setLoading(false);
-  };
+    setSuccessMessage('');
+    setErrorMessage('');
 
-  useEffect(() => {
-    const fetchResults = async () => {
-      setLoading(true);
-      const searchResults = await fetchSearchResults(query);
+    try {
+      const searchResults = await fetchSearchResults(searchQuery);
       const detailedResults = searchResults.map(extractDetails);
       setResults(detailedResults);
       setLoading(false);
-    };
 
-    fetchResults();
-  }, []);
+      if (detailedResults.length > 0) {
+        setSuccessMessage('Success: Search results fetched successfully.');
+      } else {
+        setErrorMessage('Error: No results found.');
+      }
+    } catch (error) {
+      setLoading(false);
+      setErrorMessage('Error: Failed to fetch search results.');
+    }
+  };
 
   return (
-    <div className="min-h-screen w-4/6  bg-gray-900  rounded-3xl ">
-      <h1 className="text-4xl font-poppins-regular mb-8 text-zinc-300 text-center mt-10"> Google Custom Search </h1>
-      <h2 className="text-lg font-poppins-light text-zinc-100 text-center mb-14">Made By Sr. Software  Engnieer  - Solanki Omkumar</h2>
+    <div className="min-h-screen w-4/6 bg-gray-900 rounded-3xl">
+      <h1 className="text-4xl font-poppins-regular mb-8 text-zinc-300 text-center mt-10">Google Custom Search</h1>
+      <h2 className="text-lg font-poppins-light text-zinc-100 text-center mb-14">
+        Developer Sr. Software Engineer - <span className="text-green-500 font-poppins-light">Solanki Omkumar</span>
+      </h2>
       
-      <form onSubmit={handleSearch} className="mb-8 w-full max-w-3xl mx-auto flex flex-col space-y-4">
-        <input
-          type="text"
-          value={site}
-          onChange={(e) => setSite(e.target.value)}
-          className="p-3 rounded bg-gray-800 text-white placeholder-gray-400"
-          placeholder="Enter site (e.g., linkedin.com)"
-        />
-        <input
-          type="text"
-          value={profession}
-          onChange={(e) => setProfession(e.target.value)}
-          className="p-3 rounded bg-gray-800 text-white placeholder-gray-400"
-          placeholder="Enter profession (e.g., doctors)"
-        />
-        <input
-          type="text"
-          value={place}
-          onChange={(e) => setPlace(e.target.value)}
-          className="p-3 rounded bg-gray-800 text-white placeholder-gray-400"
-          placeholder="Enter place (e.g., canada)"
-        />
-        <input
-          type="text"
-          value={emailDomain}
-          onChange={(e) => setEmailDomain(e.target.value)}
-          className="p-3 rounded bg-gray-800 text-white placeholder-gray-400"
-          placeholder="Enter email domain (e.g., @gmail.com)"
-        />
-        <button type="submit" className="bg-blue-500 text-white px-6 py-3 rounded hover:bg-blue-600 transition duration-200">
+      <form onSubmit={handleSearch} className="mb-8 w-full max-w-3xl mx-auto flex flex-col rounded-3xl space-y-4 items-center">
+        <div className="w-full md:w-1/2">
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="p-4 mb-3 rounded bg-gray-800 text-white placeholder-gray-400 w-full border border-gray-700 focus:outline-none focus:border-blue-500 transition duration-200 transform hover:scale-105 focus:scale-110 shadow hover:shadow-lg focus:shadow-xl"
+            placeholder="(e.g., Omkumar) Or Null"
+          />
+          <input
+            type="text"
+            value={site}
+            onChange={(e) => setSite(e.target.value)}
+            className="p-4 rounded bg-gray-800 text-white placeholder-gray-400 w-full border border-gray-700 focus:outline-none focus:border-blue-500 transition duration-200 transform hover:scale-105 focus:scale-110 shadow hover:shadow-lg focus:shadow-xl"
+            placeholder="Enter site (e.g., linkedin.com)"
+          />
+        </div>
+        <div className="w-full md:w-1/2">
+          <input
+            type="text"
+            value={profession}
+            onChange={(e) => setProfession(e.target.value)}
+            className="p-4 rounded bg-gray-800 text-white placeholder-gray-400 w-full border border-gray-700 focus:outline-none focus:border-blue-500 transition duration-200 transform hover:scale-105 focus:scale-110 shadow hover:shadow-lg focus:shadow-xl"
+            placeholder="Enter profession (e.g., doctors)"
+          />
+        </div>
+        <div className="w-full md:w-1/2">
+          <input
+            type="text"
+            value={place}
+            onChange={(e) => setPlace(e.target.value)}
+            className="p-4 rounded bg-gray-800 text-white placeholder-gray-400 w-full border border-gray-700 focus:outline-none focus:border-blue-500 transition duration-200 transform hover:scale-105 focus:scale-110 shadow hover:shadow-lg focus:shadow-xl"
+            placeholder="Enter place (e.g., canada)"
+          />
+        </div>
+        <div className="w-full md:w-1/2">
+          <input
+            type="text"
+            value={emailDomain}
+            onChange={(e) => setEmailDomain(e.target.value)}
+            className="p-4 rounded bg-gray-800 text-white placeholder-gray-400 w-full border border-gray-700 focus:outline-none focus:border-blue-500 transition duration-200 transform hover:scale-105 focus:scale-110 shadow hover:shadow-lg focus:shadow-xl"
+            placeholder="Enter email domain (e.g., @gmail.com)"
+          />
+        </div>
+        <button type="submit" className="bg-blue-500 text-white p-4 rounded hover:bg-blue-600 transition duration-200 w-full md:w-1/2 focus:outline-none focus:border-blue-500 transition duration-200 transform hover:scale-105 focus:scale-110 shadow hover:shadow-lg focus:shadow-xl">
           Search
         </button>
       </form>
 
-      <div className="p-10 bg-gray-800 rounded mr-10 ml-10">
+      {successMessage && (
+        <div className="text-center p-4 mb-4 font-poppins-light text-green-400">
+          <strong>{successMessage}</strong>
+        </div>
+      )}
+
+      {errorMessage && (
+        <div className="text-center p-4 mb-4 font-poppins-light text-red-800">
+          <strong>{errorMessage}</strong>
+        </div>
+      )}
+
+      <div className="p-10 bg-gray-800 rounded m-20">
         {loading ? (
           <p className="text-white text-xl text-center">Loading results...</p>
-        ) 
-          : 
-        (
+        ) : (
           results.length > 0 ? (
-            <ul className="list-disc list-inside text-white  space-y-6 w-full max-w-3xl mx-auto">
+            <ul className="list-disc list-inside text-white space-y-6 w-full max-w-3xl mx-auto">
               {results.map((result, index) => (
                 <li key={index} className="p-6 bg-gray-800 rounded-lg shadow-lg transition duration-300 transform hover:scale-105 hover:bg-gray-700">
                   {result.name && <p className="text-white text-lg mb-2"><strong className='text-white'>Name:</strong> {result.name}</p>}
@@ -152,7 +187,7 @@ const SearchPage = () => {
                   {result.emails.length > 0 && (
                     <div className="mb-2">
                       <strong className='text-white'>Emails:</strong>
-                      <ul className="list-disc list-inside">
+                      <ul className="list-none">
                         {result.emails.map((email, i) => <li key={i} className="text-white">{email}</li>)}
                       </ul>
                     </div>
@@ -160,11 +195,10 @@ const SearchPage = () => {
                   {result.phones.length > 0 && (
                     <div className="mb-2">
                       <strong className='text-white'>Phone Numbers:</strong>
-                      <ul className="list-disc list-inside">
+                      <ul className="list-none">
                         {result.phones.map((phone, i) => <li key={i} className="text-white">{phone}</li>)}
                       </ul>
                     </div>
-        
                   )}
                   <a href={result.link} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-600 underline text-xl font-semibold">
                     {result.title}
@@ -181,5 +215,5 @@ const SearchPage = () => {
     </div>
   );
 };
-
 export default SearchPage;
+
